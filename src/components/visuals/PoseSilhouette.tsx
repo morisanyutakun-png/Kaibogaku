@@ -1,14 +1,17 @@
+import Image from "next/image";
+
 import { cn } from "@/lib/utils";
 
 /**
- * Hand-drawn-feeling SVG silhouettes for the major teaching poses. Each
- * silhouette is rendered with a soft mat (the floor / horizon line) and a
- * stylized figure made from rounded paths — designed to feel like an
- * illustrated yoga workbook rather than a stock photo.
+ * The old "stick-figure" silhouette has been replaced by an editorial
+ * composition: a refined gradient mat + a serif kanji glyph that names
+ * the pose's primary intention (downward dog → 屈, warrior → 戦, etc.).
  *
- * The silhouettes intentionally use minimal anatomical detail; the goal is
- * a recognisable shape that pairs with the lesson's accent gradient on a
- * tile. Add new variants here as new poses are introduced.
+ * If the user drops `/public/images/poses/{slug}.webp` (or .jpg), the
+ * tile uses that photograph instead — so AI-generated yoga photography
+ * upgrades the entire app without touching component code.
+ *
+ * The shape API is preserved so existing call sites keep working.
  */
 export type PoseShape =
   | "downward-facing-dog"
@@ -22,157 +25,91 @@ export type PoseShape =
   | "tree-pose"
   | "default";
 
-const inkBase = "rgba(45, 41, 36, 0.78)";
-const accentBase = "rgba(255, 253, 248, 0.18)";
+const POSE_GLYPH: Record<PoseShape, string> = {
+  "downward-facing-dog": "屈",
+  "warrior-ii": "戦",
+  "triangle-pose": "三",
+  "cobra-pose": "蛇",
+  "bridge-pose": "橋",
+  "childs-pose": "息",
+  "seated-forward-fold": "伏",
+  "mountain-pose": "山",
+  "tree-pose": "樹",
+  default: "形",
+};
+
+const POSE_NAME: Record<PoseShape, string> = {
+  "downward-facing-dog": "Downward Dog",
+  "warrior-ii": "Warrior II",
+  "triangle-pose": "Triangle",
+  "cobra-pose": "Cobra",
+  "bridge-pose": "Bridge",
+  "childs-pose": "Child's Pose",
+  "seated-forward-fold": "Forward Fold",
+  "mountain-pose": "Mountain",
+  "tree-pose": "Tree",
+  default: "Asana",
+};
 
 export function PoseSilhouette({
   shape,
   className,
   ariaLabel,
+  imageSrc,
 }: {
   shape: PoseShape;
   className?: string;
   ariaLabel?: string;
+  imageSrc?: string;
 }) {
+  const glyph = POSE_GLYPH[shape] ?? "形";
+  const name = POSE_NAME[shape] ?? "Asana";
+
   return (
-    <svg
-      viewBox="0 0 200 160"
-      className={cn("h-full w-full", className)}
+    <div
+      className={cn("relative h-full w-full", className)}
       role={ariaLabel ? "img" : undefined}
       aria-label={ariaLabel}
       aria-hidden={ariaLabel ? undefined : true}
     >
-      <defs>
-        <linearGradient id="mat-shadow" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor={accentBase} />
-          <stop offset="100%" stopColor="rgba(0,0,0,0.12)" />
-        </linearGradient>
-      </defs>
-      {/* Mat / horizon line — keeps figures grounded. */}
-      <ellipse cx="100" cy="138" rx="78" ry="6" fill="url(#mat-shadow)" />
-      <Body shape={shape} />
-    </svg>
+      {imageSrc ? (
+        <Image
+          src={imageSrc}
+          alt={ariaLabel ?? ""}
+          fill
+          sizes="(min-width: 1024px) 33vw, 100vw"
+          className="object-cover"
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span
+            aria-hidden
+            className="album-glyph select-none text-card"
+            style={{
+              fontSize: "clamp(56px, 18vw, 120px)",
+              textShadow: "0 1px 0 rgba(255,255,255,0.16), 0 8px 26px rgba(0,0,0,0.18)",
+              opacity: 0.94,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {glyph}
+          </span>
+        </div>
+      )}
+      <span
+        aria-hidden
+        className="absolute bottom-3 right-4 z-10 text-[10px] font-semibold uppercase tracking-[0.18em] text-card/75"
+      >
+        {name}
+      </span>
+    </div>
   );
 }
 
-function Body({ shape }: { shape: PoseShape }) {
-  switch (shape) {
-    case "downward-facing-dog":
-      return (
-        <g fill={inkBase}>
-          {/* Inverted V — hands forward, hips back */}
-          <path d="M30 132 C 60 80, 92 50, 100 38 C 108 50, 140 80, 170 132" stroke={inkBase} strokeWidth="9" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx="32" cy="132" r="5" />
-          <circle cx="168" cy="132" r="5" />
-          <circle cx="100" cy="34" r="6.5" />
-        </g>
-      );
-    case "warrior-ii":
-      return (
-        <g fill="none" stroke={inkBase} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-          {/* Wide stance, arms outstretched */}
-          <line x1="30" y1="80" x2="170" y2="80" />
-          <circle cx="100" cy="46" r="9" fill={inkBase} />
-          <line x1="100" y1="55" x2="100" y2="100" />
-          <path d="M100 100 L70 134" />
-          <path d="M100 100 L138 134" />
-          <circle cx="68" cy="135" r="4" fill={inkBase} />
-          <circle cx="140" cy="135" r="4" fill={inkBase} />
-          <circle cx="32" cy="80" r="4" fill={inkBase} />
-          <circle cx="168" cy="80" r="4" fill={inkBase} />
-        </g>
-      );
-    case "triangle-pose":
-      return (
-        <g fill="none" stroke={inkBase} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="76" cy="42" r="9" fill={inkBase} />
-          <line x1="76" y1="51" x2="100" y2="100" />
-          <line x1="100" y1="100" x2="68" y2="134" />
-          <line x1="100" y1="100" x2="148" y2="134" />
-          <line x1="60" y1="62" x2="160" y2="106" />
-          <circle cx="60" cy="62" r="4" fill={inkBase} />
-          <circle cx="160" cy="106" r="4" fill={inkBase} />
-        </g>
-      );
-    case "cobra-pose":
-      return (
-        <g fill="none" stroke={inkBase} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-          {/* Lying on belly, lifting chest */}
-          <path d="M40 130 C 80 124, 120 122, 162 124" />
-          <path d="M70 124 C 70 100, 88 86, 108 78" />
-          <circle cx="116" cy="72" r="9" fill={inkBase} />
-          <path d="M70 124 L60 134" />
-          <path d="M88 116 L80 134" />
-        </g>
-      );
-    case "bridge-pose":
-      return (
-        <g fill="none" stroke={inkBase} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-          {/* Hips lifted, feet and shoulders down */}
-          <path d="M40 130 C 60 130, 70 130, 80 130" />
-          <path d="M120 130 C 130 130, 140 130, 160 130" />
-          <path d="M80 130 C 90 84, 110 84, 120 130" />
-          <circle cx="40" cy="130" r="9" fill={inkBase} />
-          <circle cx="160" cy="130" r="6" fill={inkBase} />
-        </g>
-      );
-    case "childs-pose":
-      return (
-        <g fill="none" stroke={inkBase} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-          {/* Folded forward, knees down */}
-          <path d="M50 130 C 80 130, 110 130, 150 130" />
-          <path d="M150 130 C 110 110, 84 100, 70 90" />
-          <circle cx="64" cy="86" r="8" fill={inkBase} />
-          <path d="M70 90 C 60 88, 52 92, 46 100" />
-        </g>
-      );
-    case "seated-forward-fold":
-      return (
-        <g fill="none" stroke={inkBase} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M30 130 L 170 130" />
-          <path d="M70 130 C 80 102, 100 92, 130 86" />
-          <circle cx="138" cy="84" r="8" fill={inkBase} />
-          <path d="M138 84 L 168 100" />
-        </g>
-      );
-    case "mountain-pose":
-      return (
-        <g fill="none" stroke={inkBase} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="100" cy="42" r="9" fill={inkBase} />
-          <line x1="100" y1="51" x2="100" y2="130" />
-          <line x1="100" y1="65" x2="80" y2="100" />
-          <line x1="100" y1="65" x2="120" y2="100" />
-          <line x1="92" y1="130" x2="92" y2="135" />
-          <line x1="108" y1="130" x2="108" y2="135" />
-        </g>
-      );
-    case "tree-pose":
-      return (
-        <g fill="none" stroke={inkBase} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="100" cy="36" r="9" fill={inkBase} />
-          <line x1="100" y1="45" x2="100" y2="130" />
-          <path d="M100 60 L80 38" />
-          <path d="M100 60 L120 38" />
-          <path d="M100 95 C 116 88, 124 102, 100 110" />
-        </g>
-      );
-    default:
-      return (
-        <g fill="none" stroke={inkBase} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="100" cy="46" r="9" fill={inkBase} />
-          <line x1="100" y1="55" x2="100" y2="120" />
-          <path d="M100 70 L80 100" />
-          <path d="M100 70 L120 100" />
-          <path d="M100 120 L88 134" />
-          <path d="M100 120 L112 134" />
-        </g>
-      );
-  }
-}
-
 /**
- * A finished tile that wraps a silhouette in a colored gradient — used as the
- * thumbnail on lesson/pose/practice cards.
+ * A finished tile that wraps the composition in a colored gradient. The
+ * gradient stays underneath the image when present, and acts as the
+ * primary surface when no photo is supplied.
  */
 export function PoseSilhouetteTile({
   shape,
@@ -180,12 +117,14 @@ export function PoseSilhouetteTile({
   label,
   sublabel,
   className,
+  imageSrc,
 }: {
   shape: PoseShape;
   gradient: string;
   label?: string;
   sublabel?: string;
   className?: string;
+  imageSrc?: string;
 }) {
   return (
     <div
@@ -200,10 +139,26 @@ export function PoseSilhouetteTile({
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            "radial-gradient(120% 80% at 100% 0%, rgba(255,255,255,0.22), transparent 55%), radial-gradient(100% 80% at 0% 100%, rgba(0,0,0,0.18), transparent 55%)",
+            "radial-gradient(120% 80% at 100% 0%, rgba(255,255,255,0.24), transparent 55%), radial-gradient(110% 90% at 0% 100%, rgba(0,0,0,0.28), transparent 55%)",
         }}
       />
-      <PoseSilhouette shape={shape} className="relative z-10" ariaLabel={label} />
+      <PoseSilhouette
+        shape={shape}
+        className="relative z-10"
+        ariaLabel={label}
+        imageSrc={imageSrc}
+      />
+      {imageSrc && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-10"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(45, 41, 36, 0.04) 0%, rgba(45, 41, 36, 0.46) 100%)",
+            mixBlendMode: "multiply",
+          }}
+        />
+      )}
       {(label || sublabel) && (
         <div className="absolute bottom-3 left-4 right-4 z-20 flex items-end justify-between text-card">
           {label && (

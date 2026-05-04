@@ -24,6 +24,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BodyMapIllustration } from "@/components/visuals/BodyMapIllustration";
 import { PoseSilhouette, shapeForSlug } from "@/components/visuals/PoseSilhouette";
 import { PoseVisualCard } from "@/components/visuals/PoseVisualCard";
+import { imageFor } from "@/data/imagery";
 import { getSourcesByIds } from "@/lib/content-utils";
 import { contentRepository } from "@/lib/repositories";
 
@@ -90,6 +91,7 @@ export default async function PoseDetailPage({ params }: PoseDetailPageProps) {
 
   if (!pose) notFound();
 
+  const posePhoto = imageFor(pose.slug, "poses");
   const poseSources = getSourcesByIds(pose.sourceIds, sources);
   const relatedLessons = lessons.filter((lesson) => pose.relatedLessonSlugs.includes(lesson.slug));
   const relatedAnatomy = anatomyItems.filter((item) =>
@@ -150,8 +152,9 @@ export default async function PoseDetailPage({ params }: PoseDetailPageProps) {
             />
             <PoseSilhouette
               shape={shapeForSlug(pose.slug)}
-              className="relative z-10 animate-breathe"
-              ariaLabel={`${pose.nameJa} のシルエット`}
+              className="relative z-10"
+              ariaLabel={pose.nameJa}
+              imageSrc={posePhoto}
             />
           </div>
         </div>
@@ -160,7 +163,7 @@ export default async function PoseDetailPage({ params }: PoseDetailPageProps) {
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
         <article className="space-y-6">
           <div className="grid gap-6 lg:grid-cols-2">
-            <PoseVisualCard poseSlug={pose.slug} title={pose.nameJa} />
+            <PoseVisualCard poseSlug={pose.slug} title={pose.nameJa} imageSrc={posePhoto} />
             <BodyMapIllustration highlights={pose.bodyAreas} />
           </div>
 

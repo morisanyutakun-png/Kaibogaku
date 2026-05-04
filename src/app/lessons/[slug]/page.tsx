@@ -19,6 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { BodyMapIllustration } from "@/components/visuals/BodyMapIllustration";
 import { PoseSilhouette, shapeForSlug } from "@/components/visuals/PoseSilhouette";
+import { imageFor } from "@/data/imagery";
 import { getSourcesByIds } from "@/lib/content-utils";
 import { contentRepository } from "@/lib/repositories";
 import { cn, toneFor } from "@/lib/utils";
@@ -60,6 +61,7 @@ export default async function LessonDetailPage({ params }: LessonDetailPageProps
 
   const tone = toneFor(lesson.category);
   const shape = SHAPE_BY_CATEGORY[lesson.category] ?? "default";
+  const lessonPhoto = imageFor(lesson.slug, "chapters");
   const lessonSources = getSourcesByIds(lesson.sourceIds, sources);
   const relatedPoses = poses.filter((pose) => lesson.relatedPoseSlugs.includes(pose.slug));
   const relatedAnatomy = anatomyItems.filter((item) =>
@@ -139,8 +141,9 @@ export default async function LessonDetailPage({ params }: LessonDetailPageProps
             />
             <PoseSilhouette
               shape={shapeForSlug(shape)}
-              className="relative z-10 animate-breathe"
-              ariaLabel={`${lesson.title} の象徴イラスト`}
+              className="relative z-10"
+              ariaLabel={lesson.title}
+              imageSrc={lessonPhoto}
             />
             <span className="glass-chip absolute left-3 top-3 z-20">
               <Sparkles className="h-3 w-3" />

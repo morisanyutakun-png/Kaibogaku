@@ -3,6 +3,7 @@ import { ArrowRight, PlayCircle } from "lucide-react";
 
 import { CautionBadge } from "@/components/content/CautionBadge";
 import { PoseSilhouette, shapeForSlug } from "@/components/visuals/PoseSilhouette";
+import { imageFor } from "@/data/imagery";
 import { cn, toneFor } from "@/lib/utils";
 import type { Pose } from "@/types/content";
 
@@ -15,6 +16,7 @@ const GRADIENT_BY_DIFFICULTY: Record<Pose["difficulty"], string> = {
 export function PoseCard({ pose }: { pose: Pose }) {
   const tone = toneFor("ポーズ");
   const gradient = GRADIENT_BY_DIFFICULTY[pose.difficulty] ?? tone.gradient;
+  const photo = imageFor(pose.slug, "poses");
   return (
     <Link
       href={`/poses/${pose.slug}`}
@@ -31,8 +33,9 @@ export function PoseCard({ pose }: { pose: Pose }) {
         />
         <PoseSilhouette
           shape={shapeForSlug(pose.slug)}
-          className="relative z-10 animate-breathe"
-          ariaLabel={`${pose.nameJa} のポーズシルエット`}
+          className="relative z-10"
+          ariaLabel={`${pose.nameJa}`}
+          imageSrc={photo}
         />
         <div className="absolute left-3 top-3 z-20 flex items-center gap-2">
           <span className="glass-chip">{pose.difficulty}</span>

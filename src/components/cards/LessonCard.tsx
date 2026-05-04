@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Clock3, Layers3, PlayCircle } from "lucide-react";
 
 import { PoseSilhouette, shapeForSlug } from "@/components/visuals/PoseSilhouette";
+import { imageFor } from "@/data/imagery";
 import { cn, toneFor } from "@/lib/utils";
 import type { Lesson } from "@/types/content";
 
@@ -16,6 +17,7 @@ const SHAPE_BY_CATEGORY: Record<string, string> = {
 export function LessonCard({ lesson }: { lesson: Lesson }) {
   const tone = toneFor(lesson.category);
   const shape = SHAPE_BY_CATEGORY[lesson.category] ?? "default";
+  const photo = imageFor(lesson.slug, "chapters");
   return (
     <Link
       href={`/lessons/${lesson.slug}`}
@@ -33,7 +35,8 @@ export function LessonCard({ lesson }: { lesson: Lesson }) {
         <PoseSilhouette
           shape={shapeForSlug(shape)}
           className="relative z-10"
-          ariaLabel={`${lesson.title} の象徴イラスト`}
+          ariaLabel={lesson.title}
+          imageSrc={photo}
         />
         <span className="glass-chip absolute left-3 top-3 z-20">
           {tone.label} · {lesson.level}

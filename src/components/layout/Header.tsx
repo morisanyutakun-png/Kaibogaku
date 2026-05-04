@@ -2,25 +2,32 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  BookOpen,
-  HeartPulse,
-  ListChecks,
-  Menu,
-  PlayCircle,
-  Sparkles,
-} from "lucide-react";
+import { Menu, PlayCircle, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
+/**
+ * Three-destination top nav (matching the bottom bar). Anatomy and
+ * Safety are kept accessible from the mobile sheet for completeness,
+ * but they don't compete for attention in the primary surface.
+ */
 const navItems = [
   { href: "/", label: "ホーム" },
   { href: "/lessons", label: "学ぶ" },
   { href: "/practice", label: "演習" },
+];
+
+const sheetExtras = [
   { href: "/anatomy", label: "解剖図鑑" },
-  { href: "/safety", label: "配慮" },
+  { href: "/safety", label: "安全配慮" },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -32,18 +39,13 @@ export function Header() {
   const pathname = usePathname();
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 glass-bar">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-3" aria-label="解剖学 ホーム">
+      <div className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center gap-2.5" aria-label="解剖学 Lab ホーム">
           <span className="flex size-9 items-center justify-center rounded-2xl bg-grad-forest text-card shadow-[0_8px_18px_rgba(49,68,47,0.32)]">
             <Sparkles className="size-4" aria-hidden="true" />
           </span>
-          <span className="leading-tight">
-            <span className="block text-[14px] font-semibold tracking-[0.02em] text-foreground">
-              解剖学 Lab
-            </span>
-            <span className="hidden text-[11px] text-muted-foreground sm:block">
-              ヨガ講師のための学習プラットフォーム
-            </span>
+          <span className="text-[15px] font-semibold tracking-[0.01em] text-foreground">
+            解剖学 Lab
           </span>
         </Link>
 
@@ -69,7 +71,11 @@ export function Header() {
 
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="rounded-full bg-card/70 lg:hidden">
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-full bg-card/70 lg:hidden"
+            >
               <Menu className="size-4" aria-hidden="true" />
               <span className="sr-only">メニューを開く</span>
             </Button>
@@ -84,27 +90,23 @@ export function Header() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "rounded-2xl px-4 py-3 text-sm text-muted-foreground transition hover:bg-muted",
+                    "rounded-2xl px-4 py-3 text-[15px] text-muted-foreground transition hover:bg-muted",
                     isActive(pathname, item.href) && "bg-sage-50 text-sage-950"
                   )}
                 >
                   {item.label}
                 </Link>
               ))}
-            </div>
-            <div className="mt-8 grid grid-cols-3 gap-2 text-center text-[11px] text-muted-foreground">
-              <div className="rounded-2xl bg-card/70 p-3">
-                <ListChecks className="mx-auto mb-2 size-4 text-sage-700" aria-hidden="true" />
-                目次
-              </div>
-              <div className="rounded-2xl bg-card/70 p-3">
-                <BookOpen className="mx-auto mb-2 size-4 text-sage-700" aria-hidden="true" />
-                学ぶ
-              </div>
-              <div className="rounded-2xl bg-card/70 p-3">
-                <HeartPulse className="mx-auto mb-2 size-4 text-clay-700" aria-hidden="true" />
-                配慮
-              </div>
+              <div className="my-3 h-px bg-border" aria-hidden />
+              {sheetExtras.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-2xl px-4 py-3 text-[13.5px] text-muted-foreground transition hover:bg-muted"
+                >
+                  {item.label}
+                </Link>
+              ))}
             </div>
           </SheetContent>
         </Sheet>
