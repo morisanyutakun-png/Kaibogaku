@@ -2,17 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, HeartPulse, LibraryBig, Menu, Sparkles } from "lucide-react";
+import { BookOpen, HeartPulse, ListChecks, Menu, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/", label: "Dashboard" },
+  { href: "/", label: "ToC" },
   { href: "/lessons", label: "Lessons" },
-  { href: "/poses", label: "Poses" },
-  { href: "/anatomy", label: "Anatomy" },
   { href: "/safety", label: "Safety" },
 ];
 
@@ -57,10 +55,10 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <Link href="/lessons">
+          <Link href="/#toc">
             <Button variant="outline" className="rounded-full border-sage-200 bg-white/70">
-              <BookOpen className="size-4" aria-hidden="true" />
-              学習を始める
+              <ListChecks className="size-4" aria-hidden="true" />
+              ToCを見る
             </Button>
           </Link>
         </div>
@@ -92,12 +90,12 @@ export function Header() {
             </div>
             <div className="mt-8 grid grid-cols-3 gap-2 text-center text-xs text-muted-foreground">
               <div className="rounded-2xl bg-white/60 p-3">
-                <BookOpen className="mx-auto mb-2 size-4 text-sage-700" aria-hidden="true" />
-                教材
+                <ListChecks className="mx-auto mb-2 size-4 text-sage-700" aria-hidden="true" />
+                目次
               </div>
               <div className="rounded-2xl bg-white/60 p-3">
-                <LibraryBig className="mx-auto mb-2 size-4 text-sage-700" aria-hidden="true" />
-                解剖
+                <BookOpen className="mx-auto mb-2 size-4 text-sage-700" aria-hidden="true" />
+                一問
               </div>
               <div className="rounded-2xl bg-white/60 p-3">
                 <HeartPulse className="mx-auto mb-2 size-4 text-sage-700" aria-hidden="true" />

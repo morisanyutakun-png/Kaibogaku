@@ -2,15 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, HeartPulse, Home, LibraryBig, PersonStanding } from "lucide-react";
+import { BookOpen, HeartPulse, ListChecks } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 const items = [
-  { href: "/", label: "Home", icon: Home },
+  { href: "/", label: "ToC", icon: ListChecks },
   { href: "/lessons", label: "Lessons", icon: BookOpen },
-  { href: "/poses", label: "Poses", icon: PersonStanding },
-  { href: "/anatomy", label: "Anatomy", icon: LibraryBig },
   { href: "/safety", label: "Safety", icon: HeartPulse },
 ];
 
@@ -27,7 +25,7 @@ export function MobileNav() {
       className="fixed inset-x-3 bottom-3 z-50 rounded-3xl border border-border/80 bg-white/85 p-2 shadow-[0_18px_60px_rgba(69,58,45,0.16)] backdrop-blur-xl lg:hidden"
       aria-label="モバイルナビゲーション"
     >
-      <div className="grid grid-cols-5 gap-1">
+      <div className="grid grid-cols-3 gap-1">
         {items.map((item) => {
           const Icon = item.icon;
           const active = isActive(pathname, item.href);

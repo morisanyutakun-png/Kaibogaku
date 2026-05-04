@@ -2,7 +2,7 @@
 
 ヨガ講師・ヨガ講師養成中の学習者向けの「ヨガ解剖学 学習プラットフォーム」MVPです。
 
-ポーズの完成形ではなく、関節・筋肉・安全配慮・講師の観察を、信頼できる参照元に紐づけて学ぶ教材として設計しています。
+ポーズの完成形ではなく、関節・筋肉・安全配慮・講師の観察を、信頼できる参照元に紐づけて学ぶ教材として設計しています。現在のMVPは、機能を「学習ToC」「一問一答」「参考情報」に絞っています。
 
 ## セットアップ
 
@@ -50,6 +50,7 @@ npm run build
 教材データは以下にあります。
 
 - `src/data/sources.ts`
+- `src/data/studyToc.ts`
 - `src/data/lessons.ts`
 - `src/data/poses.ts`
 - `src/data/anatomy.ts`
@@ -59,14 +60,14 @@ UIは直接 `src/data` をimportせず、`src/lib/repositories` の `contentRepo
 
 ## sourceIdsの重要性
 
-すべての lesson / pose / anatomy / quiz / safety topic は `sourceIds` を持ちます。
+すべての studyToc / lesson / pose / anatomy / quiz / safety topic は `sourceIds` を持ちます。
 
 出典がない教材カードはUI上で「出典未設定」と警告されます。解剖学や安全配慮に関する主張は、必ず `src/data/sources.ts` の参照元へ紐づけてください。
 
 ## 教材データの追加方法
 
 1. `src/data/sources.ts` に参照元を追加または確認
-2. lesson / pose / anatomy / safety の該当ファイルにデータを追加
+2. studyToc / lesson / pose / anatomy / safety の該当ファイルにデータを追加
 3. `sourceIds` に参照元IDを入れる
 4. 関連するslugを `relatedPoseSlugs` / `relatedAnatomySlugs` / `relatedLessons` へ追加
 5. `npm run lint` と `npm run build` を実行
@@ -96,7 +97,7 @@ MVPではstatic content repositoryを使っています。
 
 1. `drizzle-orm`, `drizzle-kit`, `@neondatabase/serverless` を導入
 2. `src/db/schema.ts` の `schemaPlan` をDrizzle table定義へ置き換える
-3. sources, lessons, poses, anatomyItems, safetyTopics, quizzes, join tablesを正規化
+3. sources, studyTocEntries, lessons, poses, anatomyItems, safetyTopics, quizzes, join tablesを正規化
 4. `src/lib/repositories/neonContentRepository.ts` を実装
 5. `src/lib/repositories/index.ts` のrepository切り替えだけでUIを維持
 

@@ -1,11 +1,18 @@
-import type { AnatomyItem, Lesson, Pose, SafetyTopic, Source } from "@/types/content";
+import type {
+  AnatomyItem,
+  Lesson,
+  Pose,
+  SafetyTopic,
+  Source,
+  StudyTocEntry,
+} from "@/types/content";
 import type { ContentRepository } from "./contentRepository";
 
 export class NeonContentRepository implements ContentRepository {
   // TODO: When moving to Neon PostgreSQL + Drizzle ORM:
   // 1. Install drizzle-orm, drizzle-kit, and @neondatabase/serverless.
   // 2. Define normalized tables in src/db/schema.ts for sources, lessons, poses,
-  //    anatomy_items, quizzes, and join tables for source references.
+  //    anatomy_items, study_toc_entries, quizzes, and join tables for source references.
   // 3. Lazily initialize the Neon/Drizzle client inside a getDb() helper so
   //    next build does not require DATABASE_URL at module evaluation time.
   // 4. Keep this repository interface stable so UI routes do not import DB
@@ -41,6 +48,10 @@ export class NeonContentRepository implements ContentRepository {
   }
 
   async getSafetyTopics(): Promise<SafetyTopic[]> {
+    throw new Error("NeonContentRepository is not implemented yet.");
+  }
+
+  async getStudyTocEntries(): Promise<StudyTocEntry[]> {
     throw new Error("NeonContentRepository is not implemented yet.");
   }
 

@@ -113,3 +113,19 @@ export interface SafetyTopic {
   avoidClaims: string[];
   sourceIds: string[];
 }
+
+export type StudyTocKind = "lesson" | "pose" | "anatomy" | "safety";
+
+export interface StudyTocEntry {
+  id: string;
+  order: string;
+  title: string;
+  eyebrow: string;
+  summary: string;
+  href: string;
+  kind: StudyTocKind;
+  estimatedMinutes: number;
+  sourceIds: string[];
+  question: string;
+  answer: string;
+}

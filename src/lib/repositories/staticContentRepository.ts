@@ -3,7 +3,15 @@ import { lessons } from "@/data/lessons";
 import { poses } from "@/data/poses";
 import { safetyTopics } from "@/data/safety";
 import { sources } from "@/data/sources";
-import type { AnatomyItem, Lesson, Pose, SafetyTopic, Source } from "@/types/content";
+import { studyTocEntries } from "@/data/studyToc";
+import type {
+  AnatomyItem,
+  Lesson,
+  Pose,
+  SafetyTopic,
+  Source,
+  StudyTocEntry,
+} from "@/types/content";
 import type { ContentRepository } from "./contentRepository";
 
 export class StaticContentRepository implements ContentRepository {
@@ -33,6 +41,10 @@ export class StaticContentRepository implements ContentRepository {
 
   async getSafetyTopics(): Promise<SafetyTopic[]> {
     return safetyTopics;
+  }
+
+  async getStudyTocEntries(): Promise<StudyTocEntry[]> {
+    return studyTocEntries;
   }
 
   async getSources(): Promise<Source[]> {

@@ -12,6 +12,7 @@ interface LearningPathCardProps {
   icon: LucideIcon;
   tone?: "sage" | "sand" | "terracotta";
   eyebrow?: string;
+  reference?: string;
 }
 
 const tones = {
@@ -27,18 +28,19 @@ export function LearningPathCard({
   icon: Icon,
   tone = "sage",
   eyebrow,
+  reference,
 }: LearningPathCardProps) {
   return (
     <Link href={href} className="group block">
       <Card
         className={cn(
-          "h-full border bg-linear-to-br p-0 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(69,58,45,0.12)]",
+          "h-full border bg-white/75 p-0 transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_42px_rgba(69,58,45,0.10)]",
           tones[tone]
         )}
       >
         <CardContent className="flex h-full flex-col p-5">
-          <div className="mb-8 flex items-center justify-between">
-            <span className="flex size-10 items-center justify-center rounded-2xl bg-white/70 shadow-sm">
+          <div className="mb-6 flex items-center justify-between">
+            <span className="flex size-10 items-center justify-center rounded-2xl bg-white shadow-sm">
               <Icon className="size-5" aria-hidden="true" />
             </span>
             <ArrowRight
@@ -51,6 +53,11 @@ export function LearningPathCard({
           ) : null}
           <h3 className="text-lg font-semibold tracking-[-0.01em]">{title}</h3>
           <p className="mt-3 text-sm leading-7 text-muted-foreground">{description}</p>
+          {reference ? (
+            <p className="mt-4 rounded-2xl bg-white/70 p-3 text-xs leading-6 text-muted-foreground">
+              参照: {reference}
+            </p>
+          ) : null}
         </CardContent>
       </Card>
     </Link>

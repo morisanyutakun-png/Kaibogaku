@@ -2,6 +2,25 @@ import type { Source } from "@/types/content";
 
 export const sources: Source[] = [
   {
+    id: "openstax-anatomy-terminology",
+    title: "1.6 Anatomical Terminology",
+    organization: "OpenStax / Rice University",
+    url: "https://openstax.org/books/anatomy-and-physiology-2e/pages/1-6-anatomical-terminology",
+    type: "textbook",
+    description: "解剖学的肢位、方向用語、身体部位名を確認し、ポーズ観察の共通語を作るための章。",
+    lastReviewedAt: "2026-05-04",
+  },
+  {
+    id: "openstax-skeletal-muscle",
+    title: "10.2 Skeletal Muscle",
+    organization: "OpenStax / Rice University",
+    url: "https://openstax.org/books/anatomy-and-physiology-2e/pages/10-2-skeletal-muscle",
+    type: "textbook",
+    description:
+      "骨格筋を器官として捉え、結合組織、神経、血管、腱を介した運動との関係を確認する章。",
+    lastReviewedAt: "2026-05-04",
+  },
+  {
     id: "yoga-alliance-rys-standards",
     title: "Standards for Registered Yoga School Credentials",
     organization: "Yoga Alliance",

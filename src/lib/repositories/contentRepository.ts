@@ -1,4 +1,11 @@
-import type { AnatomyItem, Lesson, Pose, SafetyTopic, Source } from "@/types/content";
+import type {
+  AnatomyItem,
+  Lesson,
+  Pose,
+  SafetyTopic,
+  Source,
+  StudyTocEntry,
+} from "@/types/content";
 
 export interface ContentRepository {
   getLessons(): Promise<Lesson[]>;
@@ -8,5 +15,6 @@ export interface ContentRepository {
   getAnatomyItems(): Promise<AnatomyItem[]>;
   getAnatomyItemBySlug(slug: string): Promise<AnatomyItem | null>;
   getSafetyTopics(): Promise<SafetyTopic[]>;
+  getStudyTocEntries(): Promise<StudyTocEntry[]>;
   getSources(): Promise<Source[]>;
 }
