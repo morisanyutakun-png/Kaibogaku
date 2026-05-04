@@ -1,49 +1,75 @@
 import Link from "next/link";
-import { ArrowRight, PersonStanding } from "lucide-react";
+import { ArrowRight, PlayCircle } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { CautionBadge } from "@/components/content/CautionBadge";
-import { SourceBadge } from "@/components/content/SourceBadge";
+import { PoseSilhouette, shapeForSlug } from "@/components/visuals/PoseSilhouette";
+import { cn, toneFor } from "@/lib/utils";
 import type { Pose } from "@/types/content";
 
+const GRADIENT_BY_DIFFICULTY: Record<Pose["difficulty"], string> = {
+  やさしい: "bg-grad-river",
+  標準: "bg-grad-sage",
+  注意深く: "bg-grad-dusk",
+};
+
 export function PoseCard({ pose }: { pose: Pose }) {
+  const tone = toneFor("ポーズ");
+  const gradient = GRADIENT_BY_DIFFICULTY[pose.difficulty] ?? tone.gradient;
   return (
-    <Link href={`/poses/${pose.slug}`} className="group block h-full">
-      <Card className="h-full bg-white/70 p-0 transition duration-300 hover:-translate-y-1 hover:border-sage-200 hover:shadow-[0_18px_50px_rgba(69,58,45,0.10)]">
-        <CardContent className="flex h-full flex-col p-5">
-          <div className="mb-5 flex items-start justify-between gap-3">
-            <span className="flex size-11 items-center justify-center rounded-2xl bg-sage-50 text-sage-800">
-              <PersonStanding className="size-5" aria-hidden="true" />
+    <Link
+      href={`/poses/${pose.slug}`}
+      className="surface-card group flex h-full flex-col overflow-hidden p-0"
+    >
+      <div className={cn("relative aspect-[16/10] w-full overflow-hidden", gradient)}>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(120% 80% at 100% 0%, rgba(255,255,255,0.22), transparent 55%), radial-gradient(100% 80% at 0% 100%, rgba(0,0,0,0.18), transparent 55%)",
+          }}
+        />
+        <PoseSilhouette
+          shape={shapeForSlug(pose.slug)}
+          className="relative z-10 animate-breathe"
+          ariaLabel={`${pose.nameJa} のポーズシルエット`}
+        />
+        <div className="absolute left-3 top-3 z-20 flex items-center gap-2">
+          <span className="glass-chip">{pose.difficulty}</span>
+          <CautionBadge level={pose.cautionLevel} />
+        </div>
+      </div>
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="text-[16px] font-semibold leading-snug tracking-tight">{pose.nameJa}</h3>
+        <p className="mt-1 text-[11.5px] text-muted-foreground">
+          {pose.nameEn}
+          {pose.sanskritName ? ` · ${pose.sanskritName}` : ""}
+        </p>
+        <p className="mt-2 line-clamp-3 text-[12.5px] leading-relaxed text-muted-foreground">
+          {pose.summary}
+        </p>
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {pose.bodyAreas.slice(0, 4).map((area) => (
+            <span
+              key={area}
+              className="rounded-full bg-muted px-2.5 py-0.5 text-[11px] text-muted-foreground"
+            >
+              {area}
             </span>
-            <div className="flex flex-wrap justify-end gap-2">
-              <CautionBadge level={pose.cautionLevel} />
-              <SourceBadge count={pose.sourceIds.length} />
-            </div>
-          </div>
-          <h3 className="text-lg font-semibold tracking-[-0.01em]">{pose.nameJa}</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {pose.nameEn}
-            {pose.sanskritName ? ` / ${pose.sanskritName}` : ""}
-          </p>
-          <p className="mt-3 text-sm leading-7 text-muted-foreground">{pose.summary}</p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {pose.bodyAreas.slice(0, 4).map((area) => (
-              <Badge key={area} variant="outline" className="rounded-full bg-white/60">
-                {area}
-              </Badge>
-            ))}
-          </div>
-          <div className="mt-auto flex items-center justify-between pt-6 text-xs text-muted-foreground">
-            <span>{pose.difficulty}</span>
-            <span className="line-clamp-1">{pose.teachingFocus[0]}</span>
+          ))}
+        </div>
+        <div className="mt-auto flex items-center justify-between pt-4 text-[11.5px] text-muted-foreground">
+          <span className="line-clamp-1">{pose.teachingFocus[0]}</span>
+          <span className="flex items-center gap-1 text-sage-800">
+            <PlayCircle className="size-3.5" />
+            {pose.quiz.length}問
             <ArrowRight
-              className="size-4 shrink-0 transition group-hover:translate-x-1"
+              className="ml-0.5 size-3.5 transition group-hover:translate-x-0.5"
               aria-hidden="true"
             />
-          </div>
-        </CardContent>
-      </Card>
+          </span>
+        </div>
+      </div>
     </Link>
   );
 }

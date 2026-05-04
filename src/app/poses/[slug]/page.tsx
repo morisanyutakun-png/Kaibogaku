@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Dumbbell, Eye, Move3D, RefreshCcw, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Dumbbell,
+  Eye,
+  Move3D,
+  PlayCircle,
+  RefreshCcw,
+  ShieldCheck,
+} from "lucide-react";
 
 import { MiniQuizCard } from "@/components/cards/MiniQuizCard";
 import { SafetyNoteCard } from "@/components/cards/SafetyNoteCard";
@@ -13,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BodyMapIllustration } from "@/components/visuals/BodyMapIllustration";
+import { PoseSilhouette, shapeForSlug } from "@/components/visuals/PoseSilhouette";
 import { PoseVisualCard } from "@/components/visuals/PoseVisualCard";
 import { getSourcesByIds } from "@/lib/content-utils";
 import { contentRepository } from "@/lib/repositories";
@@ -87,44 +97,64 @@ export default async function PoseDetailPage({ params }: PoseDetailPageProps) {
   );
 
   return (
-    <div className="space-y-8 py-6">
-      <Link href="/poses">
-        <Button variant="ghost" className="rounded-full px-2 text-muted-foreground">
-          <ArrowLeft className="size-4" aria-hidden="true" />
-          ポーズ一覧へ
-        </Button>
+    <div className="space-y-8 pb-20 pt-2">
+      <Link
+        href="/poses"
+        className="inline-flex items-center gap-1 text-[12.5px] font-medium text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeft className="size-3.5" aria-hidden="true" />
+        ポーズ一覧へ
       </Link>
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_420px] lg:items-end">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="outline" className="rounded-full bg-white/70">
-              {pose.difficulty}
-            </Badge>
-            <CautionBadge level={pose.cautionLevel} />
-            <SourceBadge count={pose.sourceIds.length} />
+      <section className="editorial-card relative overflow-hidden p-0">
+        <div className="grid gap-0 lg:grid-cols-[1fr_300px]">
+          <div className="space-y-4 p-6 sm:p-7">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="outline" className="rounded-full bg-card/70">
+                {pose.difficulty}
+              </Badge>
+              <CautionBadge level={pose.cautionLevel} />
+              <SourceBadge count={pose.sourceIds.length} />
+            </div>
+            <h1 className="text-[28px] font-semibold leading-tight tracking-tight text-balance sm:text-[32px]">
+              {pose.nameJa}
+            </h1>
+            <p className="text-[14px] text-charcoal-700">
+              {pose.nameEn}
+              {pose.sanskritName ? ` · ${pose.sanskritName}` : ""}
+            </p>
+            <p className="max-w-[60ch] text-[13.5px] leading-[1.85] text-muted-foreground text-pretty">
+              {pose.summary}
+            </p>
+            {pose.quiz.length > 0 && (
+              <div className="pt-1">
+                <Link
+                  href={`/practice/pose/${pose.slug}`}
+                  className="pill-terracotta h-10 px-4 text-[13px]"
+                >
+                  <PlayCircle className="h-3.5 w-3.5" />
+                  一問一答 {pose.quiz.length}問
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            )}
           </div>
-          <h1 className="mt-5 text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">
-            {pose.nameJa}
-          </h1>
-          <p className="mt-3 text-xl text-charcoal-700">
-            {pose.nameEn}
-            {pose.sanskritName ? ` / ${pose.sanskritName}` : ""}
-          </p>
-          <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">{pose.summary}</p>
+          <div className="bg-grad-terracotta relative hidden overflow-hidden lg:block">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                backgroundImage:
+                  "radial-gradient(120% 80% at 100% 0%, rgba(255,255,255,0.22), transparent 55%), radial-gradient(100% 80% at 0% 100%, rgba(0,0,0,0.18), transparent 55%)",
+              }}
+            />
+            <PoseSilhouette
+              shape={shapeForSlug(pose.slug)}
+              className="relative z-10 animate-breathe"
+              ariaLabel={`${pose.nameJa} のシルエット`}
+            />
+          </div>
         </div>
-        <Card className="bg-white/70">
-          <CardHeader>
-            <CardTitle>このページで学ぶこと</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="grid gap-3 text-sm leading-7 text-muted-foreground">
-              <li>主な関節運動と関わる筋肉</li>
-              <li>伸びやすい部位と安定に使う部位</li>
-              <li>講師が観察するポイントと修正候補</li>
-            </ul>
-          </CardContent>
-        </Card>
       </section>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">

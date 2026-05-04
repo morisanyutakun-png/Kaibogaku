@@ -25,18 +25,30 @@ export default async function SafetyPage() {
   const safetySources = getSourcesByIds(safetySourceIds, sources);
 
   return (
-    <div className="space-y-8 py-6">
-      <section className="grid gap-6 lg:grid-cols-[1fr_420px] lg:items-end">
-        <div>
-          <p className="text-sm font-medium text-sage-800">Safety</p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">
-            安全配慮モジュール
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
-            医療アドバイスではなく、ヨガ講師がクラスで配慮しやすい一般的な観察・修正候補・言葉がけとして整理しています。
-          </p>
+    <div className="space-y-9 pb-20 pt-2">
+      <header className="space-y-1.5 pt-1">
+        <div className="kicker">Safety</div>
+        <h1 className="text-[26px] font-semibold leading-tight tracking-tight sm:text-[30px]">
+          配慮の言葉を、毎回のクラスに置く
+        </h1>
+        <p className="max-w-[58ch] text-[13.5px] leading-relaxed text-muted-foreground text-pretty">
+          医療アドバイスではなく、ヨガ講師がクラスで配慮しやすい一般的な観察・修正候補・言葉がけとして整理しています。
+        </p>
+      </header>
+      <section className="hero-tile bg-grad-dusk">
+        <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="text-[10.5px] font-semibold uppercase tracking-[0.14em] opacity-85">
+              基本姿勢
+            </div>
+            <h2 className="mt-1 text-[20px] font-semibold leading-tight tracking-tight sm:text-[22px]">
+              診断はしない。観察と修正候補を伝える。
+            </h2>
+            <p className="mt-1 max-w-[44ch] text-[12.5px] leading-relaxed opacity-90">
+              痛み・不安・既往歴・妊娠中・高齢者などに当てはまる場合は、無理をせず、必要に応じて専門家へ相談を促しましょう。
+            </p>
+          </div>
         </div>
-        <SafetyNoteCard />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
